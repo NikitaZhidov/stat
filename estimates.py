@@ -24,6 +24,8 @@ def print_calculated_estimates():
 
   print(f"Медиана: {median}")
 
+stat_data_length = len(stat_data)
+
 # Мат ожидание
 mean = calculate_first_stat_data_moment(1)
 
@@ -31,7 +33,7 @@ mean = calculate_first_stat_data_moment(1)
 variance = np.var(stat_data, ddof=1)
 
 # Среднеквадратическое отклонение
-std_deviation = np.std(stat_data)
+std_deviation = variance ** (1/2)
 
 # Начальные моменты
 first_moments = [calculate_first_stat_data_moment(i) for i in range(1, 5)]
@@ -50,7 +52,7 @@ skewness = central_moment_3 / (std_deviation ** 3)
 # Медиана
 median = np.median(stat_data)
 
-printCalculatedEstimates = True
+printCalculatedEstimates = False
 
 if printCalculatedEstimates:
   print_calculated_estimates()
