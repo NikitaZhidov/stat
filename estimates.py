@@ -52,6 +52,9 @@ skewness = central_moment_3 / (std_deviation ** 3)
 # Медиана
 median = np.median(stat_data)
 
+maximum = np.max(stat_data)
+minimum = np.min(stat_data)
+
 printCalculatedEstimates = False
 
 if printCalculatedEstimates:
