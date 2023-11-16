@@ -1,9 +1,10 @@
-from ecdf import ecdf, ecdf_edges_middles, ecdf_edges, ecdf_plot
+from ecdf import ecdf, ecdf_edges_middles, ecdf_edges, ecdf_plot, ecdf_exact
 from stat_data import stat_data
 from estimates import maximum, minimum, std_deviation, mean
 from scipy.stats import norm
 import numpy as np
 from scipy.stats import kstest, ksone
+from scipy.stats import kstwobign
 
 import matplotlib.pyplot as plt
 
@@ -14,12 +15,14 @@ import matplotlib.pyplot as plt
 sign_level = 0.1;
 null_hypothesis = norm(loc=mean, scale=std_deviation)
 
+y1 = null_hypothesis.pdf(0.5);
+y2 = np.exp((-1/2)*((0.5 - std_deviation)/std_deviation) ** 2) / (std_deviation * (2 * np.pi) ** 0.5)
 
 # 2 ШАГ. Считаем статистику критерия
 # D = sup|F'() - F()| (теоретич - эмпирич)
 
 # Значения ЭМПИРИЧЕСКОЙ и ТЕОРЕТИЧЕСКОЙ функций распределения
-F_empiric_values = [ecdf(x) for x in ecdf_edges_middles]
+F_empiric_values = [ecdf_exact(x) for x in ecdf_edges_middles]
 F_theoretical_values = [null_hypothesis.cdf(x) for x in ecdf_edges_middles]
 
 # Нахождение статистики Колмогорова
@@ -50,7 +53,7 @@ print(f"Статистика Колмогорова: 1) {D}  2) (Автомат�
 # Правосторонняя критическая область sqrt(n) * N >= quantile | H0 ~ 1 - K(quantile) = sign_level
 
 # Квантиль распределения Коломогорова
-quantile = ksone.ppf(1 - sign_level, len(stat_data))
+quantile = kstwobign.ppf(1 - sign_level)
 print(f"Квантиль распределения Коломогорова при уровне значимости {sign_level}: {quantile}")
 
 # 4 ШАГ. Принятие решения
@@ -58,6 +61,6 @@ Z = (len(stat_data) ** 1/2) * D
 print("sqrt(n) * статистика Колмогорова: ", Z)
 
 if (Z >= quantile):
-  print('Гипотеза отвергается', f"{Z} >= {quantile}")
+  print('Гипотеза отвергается', f"{Z} >= {quantile}, {kstest_expon.pvalue}")
 else:
   print('Гипотеза отвергается', f"{Z} < {quantile}")

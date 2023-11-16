@@ -17,6 +17,14 @@ ecdf_relative_frequencies = [
   for right_edge in np.append(ecdf_edges[1:], np.Infinity)
 ]
 
+def ecdf_for_sample(sample, value):
+  less_or_equal = 0
+  for val in sample:
+    if (val <= value):
+      less_or_equal += 1
+
+  return less_or_equal / len(sample)
+
 
 def ecdf(value):
   global ecdf_relative_frequencies
@@ -29,6 +37,12 @@ def ecdf(value):
       return ecdf_relative_frequencies[index - 1]
 
   return 1;
+
+def ecdf_exact(value):
+  global stat_data;
+  return ecdf_for_sample(stat_data, value)
+
+
 
 def ecdf_plot(plot, label):
   global ecdf_relative_frequencies

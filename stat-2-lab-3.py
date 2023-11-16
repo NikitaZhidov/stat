@@ -11,7 +11,7 @@ from estimates import mean, std_deviation
 # 1 ШАГ. Выдвижение гипотезы
 # Гипотеза о принадлежности выборки нормальному распределению
 
-sign_level = 0.1;
+sign_level = 0.01;
 
 # 2 ШАГ. Расчет
 

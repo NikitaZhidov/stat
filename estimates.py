@@ -27,13 +27,13 @@ def print_calculated_estimates():
 stat_data_length = len(stat_data)
 
 # Мат ожидание
-mean = calculate_first_stat_data_moment(1)
+mean = np.mean(stat_data)
 
 # Дисперсия (несмещенная)
 variance = np.var(stat_data, ddof=1)
 
 # Среднеквадратическое отклонение
-std_deviation = variance ** (1/2)
+std_deviation = np.std(stat_data, ddof=1)
 
 # Начальные моменты
 first_moments = [calculate_first_stat_data_moment(i) for i in range(1, 5)]

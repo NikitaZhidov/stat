@@ -1,6 +1,6 @@
 import numpy as np
 from stat_data import stat_data
-from estimates import stat_data_length, minimum, maximum, std_deviation
+from estimates import stat_data_length, minimum, maximum, mean
 from scipy.stats import expon, chisquare, chi2
 
 # Критерий Пирсона
@@ -8,7 +8,7 @@ from scipy.stats import expon, chisquare, chi2
 # 1 ШАГ. Выдвижение гипотезы
 # Гипотеза о принадлежности выборки экспоненциальному распределению
 
-null_hypothesis = expon(loc=0, scale=std_deviation)
+null_hypothesis = expon(loc=minimum, scale=mean)
 sign_level = 0.1;
 
 # 2 ШАГ. Выбор критической области
@@ -51,11 +51,11 @@ print(f"Статистика Хи квадрат: 1) {X} 2) (Автоматич.
 # Правосторонняя критическая область Х^2 >= quantile | H0 = sign_level
 
 quantile = chi2.ppf(1 - sign_level, len(stat_data) - 1)
-print(f"Квантиль распределения Хи квадрат с уровне значимости {sign_level} и со степенями свободы {len(stat_data) - 1}: {quantile}")
+print(f"Квантиль распределения Хи квадрат с уровне значимости {sign_level} и со степенями свободы {len(stat_data) - 1}: {quantile}, p_value: {p}")
 
 # ШАГ 4. Принятие решения
 if (X >= quantile):
-  print('Гипотеза отвергается', f"{X} >= {quantile}")
+  print('Гипотеза отвергается', f"{X} >= {quantile}, p_value: {p}")
 else:
-  print('Гипотеза не отвергается', f"{X} < {quantile}, p-value: {p}");
+  print('Гипотеза принимается', f"{X} < {quantile}, p-value: {p}");
 

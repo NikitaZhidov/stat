@@ -1,7 +1,8 @@
-from ecdf import ecdf, ecdf_edges_middles, ecdf_edges, ecdf_plot
+from ecdf import ecdf, ecdf_edges_middles, ecdf_edges, ecdf_plot, ecdf_exact
 from stat_data import stat_data
 from estimates import maximum, minimum
 from scipy.stats import uniform
+from scipy.stats import kstwobign
 import numpy as np
 from scipy.stats import kstest, ksone, uniform
 import matplotlib.pyplot as plt
@@ -16,7 +17,7 @@ null_hypothesis = uniform(minimum, maximum)
 # D = sup|F'() - F()| (теоретич - эмпирич)
 
 # Значения ЭМПИРИЧЕСКОЙ и ТЕОРЕТИЧЕСКОЙ функций распределения
-F_empiric_values = [ecdf(x) for x in ecdf_edges_middles]
+F_empiric_values = [ecdf_exact(x) for x in ecdf_edges_middles]
 F_theoretical_values = [null_hypothesis.cdf(x) for x in ecdf_edges_middles]
 
 # Нахождение статистики Колмогорова
@@ -41,8 +42,7 @@ plt.legend();
 plt.show();
 
 # Пересчет автоматич средствавми
-normalized_data = (np.array(stat_data) - min(stat_data)) / (max(stat_data) - min(stat_data))
-kstest_uniform = kstest(normalized_data, 'uniform')
+kstest_uniform = kstest(stat_data, null_hypothesis.cdf)
 
 print(f"Статистика Колмогорова: 1) {D}  2) (Автоматич.) {kstest_uniform.statistic}")
 
@@ -50,7 +50,8 @@ print(f"Статистика Колмогорова: 1) {D}  2) (Автомат�
 # Правосторонняя критическая область sqrt(n) * N >= quantile | H0 ~ 1 - K(quantile) = sign_level
 
 # Квантиль распределения Коломогорова
-quantile = ksone.ppf(1 - sign_level, len(stat_data))
+quantile = kstwobign.ppf(1 - sign_level)
+
 print(f"Квантиль распределения Коломогорова при уровне значимости {sign_level}: {quantile}")
 
 # 4 ШАГ. Принятие решения
