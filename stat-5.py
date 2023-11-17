@@ -56,10 +56,6 @@ data2_mean = np.mean(data2)
 
 # Ручной расчет
 num_bins = 10
-freq_1, borders_1 = np.histogram(data1, bins=10)
-freq_1_mean = np.mean(freq_1)
-freq_2, borders_2 = np.histogram(data2, bins=10)
-freq_2_mean = np.mean(freq_2)
 
 DATA_LENGTH = len(data1)
 
@@ -70,19 +66,19 @@ print(" ")
 # Коэф корреляции Пирсона
 
 # Рассчитываем числитель
-numerator = np.sum((freq_1 - freq_1_mean) * (freq_2 - freq_2_mean))
+numerator = np.sum((data1 - data1_mean) * (data2 - data2_mean))
 
 # Рассчитываем знаменатель
-denominator = np.sqrt(np.sum((freq_1 - freq_1_mean) ** 2) * np.sum((freq_2 - freq_2_mean) ** 2))
+denominator = np.sqrt(np.sum((data1 - data1_mean) ** 2) * np.sum((data2 - data2_mean) ** 2))
 
 # Рассчитываем коэффициент корреляции Пирсона
 c_pearson_manual = (numerator / denominator)
 
-c_pearson, pvalue_pearson = pearsonr(freq_1, freq_2)
+c_pearson, pvalue_pearson = pearsonr(data1, data2)
 print(f"Пирсон: Коэффициент = {c_pearson}, (ручн.): {c_pearson_manual}, pvalue = {pvalue_pearson}")
 
-statistics_pearson = (c_pearson_manual * np.sqrt(DATA_LENGTH - 2))/(1 - c_pearson_manual ** 2);
-print(f"Пирсон: статистика = {statistics_pearson}, квантиль (Стьюдента) = {t.ppf(1 - sign_level, DATA_LENGTH - 2)}")
+statistics_pearson = (c_pearson_manual * np.sqrt(len(data1) - 2))/(1 - c_pearson_manual ** 2);
+print(f"Пирсон: статистика = {statistics_pearson}, квантиль (Стьюдента) = {t.ppf(1 - sign_level, len(data1) - 2)}")
 
 print(" ")
 
